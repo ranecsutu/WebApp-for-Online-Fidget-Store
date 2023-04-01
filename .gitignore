@@ -1,2 +1,4 @@
 Makefile
 .air.toml
+tmp/
+dist/
