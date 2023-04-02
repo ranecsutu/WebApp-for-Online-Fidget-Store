@@ -1,4 +1,5 @@
 Makefile
 .air.toml
+database.yml
 tmp/
 dist/
