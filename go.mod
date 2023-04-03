@@ -3,6 +3,7 @@ module github.com/ranecsutu/fidget
 go 1.18
 
 require (
+	github.com/alexedwards/scs/v2 v2.5.1 // indirect
 	github.com/cosmtrek/air v1.42.0 // indirect
 	github.com/creack/pty v1.1.18 // indirect
 	github.com/fatih/color v1.15.0 // indirect
