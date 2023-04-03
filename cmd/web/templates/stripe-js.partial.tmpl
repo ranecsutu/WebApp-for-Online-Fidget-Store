@@ -1,7 +1,7 @@
 {{define "stripe-js"}}
 <script src="https://js.stripe.com/v3/"></script>
 
-    <script>
+<script>
     let card;
     let stripe;
     const cardMessages = document.getElementById("card-messages");
@@ -45,7 +45,7 @@
         form.classList.add("was-validated");
         hidePayButton();
 
-        let amountToCharge = String(parseFloat(document.getElementById("amount").value) * 100)
+        let amountToCharge = document.getElementById("amount").value;
         
         let payload = {
             amount: amountToCharge,
@@ -129,5 +129,5 @@
             }
         });
     })();
-    </script>
+</script>
 {{end}}

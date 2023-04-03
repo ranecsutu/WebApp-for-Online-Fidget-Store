@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -29,7 +30,7 @@ func (app *application) GetPaymentIntent(w http.ResponseWriter, r *http.Request)
 		app.errorLog.Println(err)
 		return
 	}
-
+	fmt.Printf("AMOUNT: %+v ", payload.Amount)
 	amount, err := strconv.Atoi(payload.Amount)
 
 	if err != nil {
