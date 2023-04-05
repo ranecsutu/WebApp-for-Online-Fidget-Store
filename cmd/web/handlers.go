@@ -10,7 +10,14 @@ import (
 	"github.com/ranecsutu/fidget/internal/models"
 )
 
-// VirtualTerminal displays the page terminal
+// Home displays the home page
+func (app *application) Home(w http.ResponseWriter, r *http.Request) {
+	if err := app.renderTemplate(w, r, "home", &templateData{}); err != nil {
+		app.errorLog.Println(err)
+	}
+}
+
+// VirtualTerminal displays the virtual terminal page
 func (app *application) VirtualTerminal(w http.ResponseWriter, r *http.Request) {
 	if err := app.renderTemplate(w, r, "terminal", &templateData{}, "stripe-js"); err != nil {
 		app.errorLog.Println(err)
@@ -84,13 +91,6 @@ func (app *application) GetTransactionData(r *http.Request) (TransactionData, er
 		BankReturnCode:  pi.Charges.Data[0].ID,
 	}
 	return txnData, nil
-}
-
-// Home displays the home page
-func (app *application) Home(w http.ResponseWriter, r *http.Request) {
-	if err := app.renderTemplate(w, r, "home", &templateData{}); err != nil {
-		app.errorLog.Println(err)
-	}
 }
 
 // PaymentSucceeded displays the receipt page
@@ -214,7 +214,7 @@ func (app *application) VirtualTerminalReceipt(w http.ResponseWriter, r *http.Re
 	}
 }
 
-// SaveCustomersaves saves a customer and returns id
+// SaveCustomer saves a customer and returns id
 func (app *application) SaveCustomer(firstName, lastName, email string) (int, error) {
 	customer := models.Customer{
 		FirstName: firstName,
@@ -226,27 +226,24 @@ func (app *application) SaveCustomer(firstName, lastName, email string) (int, er
 	if err != nil {
 		return 0, err
 	}
-
 	return id, nil
 }
 
-// SaveTransaction saves a transaction and returns id
+// SaveTransaction saves a txn and returns id
 func (app *application) SaveTransaction(txn models.Transaction) (int, error) {
 	id, err := app.DB.InsertTransaction(txn)
 	if err != nil {
 		return 0, err
 	}
-
 	return id, nil
 }
 
-// SaveOrder saves an order and returns id
+// SaveOrder saves a order and returns id
 func (app *application) SaveOrder(order models.Order) (int, error) {
 	id, err := app.DB.InsertOrder(order)
 	if err != nil {
 		return 0, err
 	}
-
 	return id, nil
 }
 
@@ -268,5 +265,28 @@ func (app *application) ChargeOnce(w http.ResponseWriter, r *http.Request) {
 		Data: data,
 	}, "stripe-js"); err != nil {
 		app.errorLog.Println(err)
+	}
+}
+
+func (app *application) BronzePlan(w http.ResponseWriter, r *http.Request) {
+	widget, err := app.DB.GetWidget(2)
+	if err != nil {
+		app.errorLog.Println(err)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["widget"] = widget
+
+	if err := app.renderTemplate(w, r, "bronze-plan", &templateData{
+		Data: data,
+	}); err != nil {
+		app.errorLog.Print(err)
+	}
+}
+
+func (app *application) BronzePlanReceipt(w http.ResponseWriter, r *http.Request) {
+	if err := app.renderTemplate(w, r, "receipt-plan", &templateData{}); err != nil {
+		app.errorLog.Print(err)
 	}
 }
