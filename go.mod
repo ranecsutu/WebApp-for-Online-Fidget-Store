@@ -5,6 +5,8 @@ go 1.18
 require golang.org/x/crypto v0.7.0
 
 require (
+	github.com/alexedwards/scs v1.4.1 // indirect
+	github.com/alexedwards/scs/mysqlstore v0.0.0-20230327161757-10d4299e3b24 // indirect
 	github.com/alexedwards/scs/v2 v2.5.1 // indirect
 	github.com/cosmtrek/air v1.42.0 // indirect
 	github.com/creack/pty v1.1.18 // indirect
