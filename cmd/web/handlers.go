@@ -19,7 +19,7 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 
 // VirtualTerminal displays the virtual terminal page
 func (app *application) VirtualTerminal(w http.ResponseWriter, r *http.Request) {
-	if err := app.renderTemplate(w, r, "terminal", &templateData{}, "stripe-js"); err != nil {
+	if err := app.renderTemplate(w, r, "terminal", &templateData{}); err != nil {
 		app.errorLog.Println(err)
 	}
 }
@@ -287,6 +287,13 @@ func (app *application) BronzePlan(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) BronzePlanReceipt(w http.ResponseWriter, r *http.Request) {
 	if err := app.renderTemplate(w, r, "receipt-plan", &templateData{}); err != nil {
+		app.errorLog.Print(err)
+	}
+}
+
+// LoginPage displays the login page
+func (app *application) LoginPage(w http.ResponseWriter, r *http.Request) {
+	if err := app.renderTemplate(w, r, "login", &templateData{}); err != nil {
 		app.errorLog.Print(err)
 	}
 }
