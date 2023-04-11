@@ -24,6 +24,14 @@ type config struct {
 		secret string
 		key    string
 	}
+	smtp struct {
+		host     string
+		port     int
+		username string
+		password string
+	}
+	secretkey string
+	frontend  string
 }
 
 type application struct {
@@ -54,6 +62,13 @@ func main() {
 	flag.IntVar(&cfg.port, "port", 4001, "Server port to listen on")
 	flag.StringVar(&cfg.env, "env", "development", "Application environment {development|production|maintenance}")
 	flag.StringVar(&cfg.db.dsn, "dsn", "", "URL to dsn")
+	flag.StringVar(&cfg.smtp.host, "smtphost", "sandbox.smtp.mailtrap.io", "smtp host")
+	flag.StringVar(&cfg.smtp.username, "smtpuser", "1bf61a987cb9f4", "smtp user")
+	flag.StringVar(&cfg.smtp.password, "smtppassword", "40161f4f0c8bb9", "smtp password")
+	flag.IntVar(&cfg.smtp.port, "smtpport", 587, "smtp port")
+	flag.StringVar(&cfg.secretkey, "secret", "01234567890123456789012345678901", "secret key") //secret key needs to be exactly 32 letters long
+	flag.StringVar(&cfg.frontend, "frontend", "http://localhost:4000", "url to frontend")
+
 	/* Read stripe key&secret from flags (if any) */
 	flag.StringVar(&cfg.stripe.key, "STRIPE_KEY", "", "Stripe key")
 	flag.StringVar(&cfg.stripe.secret, "STRIPE_SECRET", "", "Stripe secret")

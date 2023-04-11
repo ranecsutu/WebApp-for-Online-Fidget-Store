@@ -1,13 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/ranecsutu/fidget/internal/cards"
+	"github.com/ranecsutu/fidget/internal/encryption"
 	"github.com/ranecsutu/fidget/internal/models"
+	"github.com/ranecsutu/fidget/internal/urlsigner"
 )
 
 // Home displays the home page
@@ -325,4 +328,53 @@ func (app *application) Logout(w http.ResponseWriter, r *http.Request) {
 	app.Session.RenewToken(r.Context())
 
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
+}
+
+func (app *application) ForgotPassword(w http.ResponseWriter, r *http.Request) {
+	if err := app.renderTemplate(w, r, "forgot-password", &templateData{}); err != nil {
+		app.errorLog.Print(err)
+	}
+}
+
+func (app *application) ShowResetPassword(w http.ResponseWriter, r *http.Request) {
+	email := r.URL.Query().Get("email")
+	theURL := r.RequestURI
+	testURL := fmt.Sprintf("%s%s", app.config.frontend, theURL)
+
+	signer := urlsigner.Signer{
+		Secret: []byte(app.config.secretkey),
+	}
+
+	valid := signer.VerifyToken(testURL)
+
+	if !valid {
+		app.errorLog.Println("Invalid url - tampering detected")
+		return
+	}
+
+	// make sure not expired
+	expired := signer.Expired(testURL, 60)
+	if expired {
+		app.errorLog.Println("Link expired")
+		return
+	}
+
+	ecryptor := encryption.Encryption{
+		Key: []byte(app.config.secretkey),
+	}
+
+	ecryptedEmail, err := ecryptor.Encrypt(email)
+	if err != nil {
+		app.errorLog.Println("Ecryption failed")
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["email"] = ecryptedEmail
+
+	if err := app.renderTemplate(w, r, "reset-password", &templateData{
+		Data: data,
+	}); err != nil {
+		app.errorLog.Print(err)
+	}
 }

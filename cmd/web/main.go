@@ -32,6 +32,8 @@ type config struct {
 		secret string
 		key    string
 	}
+	secretkey string
+	frontend  string
 }
 
 type application struct {
@@ -67,6 +69,8 @@ func main() {
 	flag.StringVar(&cfg.env, "env", "development", "Application environment {development|production}")
 	flag.StringVar(&cfg.db.dsn, "dsn", "", "URL to dsn")
 	flag.StringVar(&cfg.api, "api", "http://localhost:4001", "URL to api")
+	flag.StringVar(&cfg.secretkey, "secret", "01234567890123456789012345678901", "secret key") //secret key needs to be exactly 32 letters long
+	flag.StringVar(&cfg.frontend, "frontend", "http://localhost:4000", "url to frontend")
 	/* Read stripe key&secret from flags (if any) */
 	flag.StringVar(&cfg.stripe.key, "STRIPE_KEY", "", "Stripe key")
 	flag.StringVar(&cfg.stripe.secret, "STRIPE_SECRET", "", "Stripe secret")
