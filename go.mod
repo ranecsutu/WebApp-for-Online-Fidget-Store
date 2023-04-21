@@ -19,5 +19,6 @@ require (
 	github.com/stretchr/testify v1.8.1 // indirect
 	github.com/stripe/stripe-go v70.15.0+incompatible // indirect
 	github.com/toorop/go-dkim v0.0.0-20201103131630-e1cd1a0a5208 // indirect
+	go.smantic.dev/websocket v1.0.1 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 )
