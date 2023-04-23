@@ -15,6 +15,7 @@ import (
 	"github.com/ranecsutu/fidget/internal/encryption"
 	"github.com/ranecsutu/fidget/internal/models"
 	"github.com/ranecsutu/fidget/internal/urlsigner"
+	"github.com/ranecsutu/fidget/internal/validator"
 	"github.com/stripe/stripe-go/v72"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -138,6 +139,15 @@ func (app *application) CreateCustomerAndSubscribeToPlan(w http.ResponseWriter, 
 	}
 
 	app.infoLog.Println(data.Email, data.LastFour, data.PaymentMethod, data.Plan)
+
+	//validate data
+	v := validator.New()
+	v.Check(len(data.FirstName) > 1, "first_name", "must be at least 2 characters")
+
+	if !v.Valid() {
+		app.failedValidation(w, r, v.Errors)
+		return
+	}
 
 	card := cards.Card{
 		Secret:   app.config.stripe.secret,

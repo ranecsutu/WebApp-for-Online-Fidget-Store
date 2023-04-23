@@ -12,3 +12,4 @@ Prerequisites:
 
 Steps to run:
 1. Can use Air or Makefile in order to start front/back end. Use "Make start" "Make stop" to start/stop the front/back-end using make file.
+2. To make a payment use the IBAN 4242 4242 4242 4242 (stripe test IBAN that is always accepted).
